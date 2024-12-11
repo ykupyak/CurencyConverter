@@ -1,0 +1,70 @@
+//
+//  Localizable.strings
+//  Currency Converter
+//
+//  Created by Yaroslav Kupyak on 11.12.2024.
+//
+
+"Amount" = "Amount";
+"Enter Amount" = "Enter Amount";
+"From Currency" = "From Currency";
+"To Currency" = "To Currency";
+"Converted Amount: --" = "Converted Amount: --";
+"Exchange Rate: --" = "Exchange Rate: --";
+"Currency Converter" = "Currency Converter";
+"Conversion failed. Please try again." = "Conversion failed. Please try again.";
+"%.2f %@ is equal to %.2f %@" = "%.2f %@ is equal to %.2f %@";
+"1 %@ = %.2f %@" = "1 %@ = %.2f %@";
+
+// Add currency names
+"United States Dollar" = "United States Dollar";
+"Euro" = "Euro";
+"Latvian Lats" = "Latvian Lats";
+"Ukrainian Hryvnia" = "Ukrainian Hryvnia";
+"United Arab Emirates Dirham" = "United Arab Emirates Dirham";
+"Albanian Lek" = "Albanian Lek";
+"Argentine Peso" = "Argentine Peso";
+"Australian Dollar" = "Australian Dollar";
+"Azerbaijani Manat" = "Azerbaijani Manat";
+"Bosnia-Herzegovina Convertible Mark" = "Bosnia-Herzegovina Convertible Mark";
+"Bulgarian Lev" = "Bulgarian Lev";
+"Brazilian Real" = "Brazilian Real";
+"Belarusian Ruble" = "Belarusian Ruble";
+"Canadian Dollar" = "Canadian Dollar";
+"Swiss Franc" = "Swiss Franc";
+"Chilean Peso" = "Chilean Peso";
+"Chinese Yuan" = "Chinese Yuan";
+"Colombian Peso" = "Colombian Peso";
+"Cape Verdean Escudo" = "Cape Verdean Escudo";
+"Czech Koruna" = "Czech Koruna";
+"Danish Krone" = "Danish Krone";
+"Algerian Dinar" = "Algerian Dinar";
+"Egyptian Pound" = "Egyptian Pound";
+"Georgian Lari" = "Georgian Lari";
+"Hong Kong Dollar" = "Hong Kong Dollar";
+"Hungarian Forint" = "Hungarian Forint";
+"Israeli New Shekel" = "Israeli New Shekel";
+"Indian Rupee" = "Indian Rupee";
+"Iraqi Dinar" = "Iraqi Dinar";
+"Jordanian Dinar" = "Jordanian Dinar";
+"Japanese Yen" = "Japanese Yen";
+"Kuwaiti Dinar" = "Kuwaiti Dinar";
+"Kazakhstani Tenge" = "Kazakhstani Tenge";
+"Moroccan Dirham" = "Moroccan Dirham";
+"Moldovan Leu" = "Moldovan Leu";
+"Macedonian Denar" = "Macedonian Denar";
+"Mexican Peso" = "Mexican Peso";
+"Nigerian Naira" = "Nigerian Naira";
+"Norwegian Krone" = "Norwegian Krone";
+"New Zealand Dollar" = "New Zealand Dollar";
+"Philippine Peso" = "Philippine Peso";
+"Polish Złoty" = "Polish Złoty";
+"Romanian Leu" = "Romanian Leu";
+"Serbian Dinar" = "Serbian Dinar";
+"Russian Ruble" = "Russian Ruble";
+"Saudi Riyal" = "Saudi Riyal";
+"Swedish Krona" = "Swedish Krona";
+"Singapore Dollar" = "Singapore Dollar";
+"Thai Baht" = "Thai Baht";
+"Turkish Lira" = "Turkish Lira";
+"South African Rand" = "South African Rand";
