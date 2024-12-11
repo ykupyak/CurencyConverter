@@ -10,15 +10,24 @@ import SnapKit
 
 class CurrencyViewController: UIViewController {
     
+    // Define constants for UI elements
+    private var labelFont: UIFont {
+        UIFont.systemFont(ofSize: 16, weight: .regular)
+    }
+    private let resultFont = UIFont.systemFont(ofSize: 18, weight: .medium)
+    private let padding: CGFloat = 20
+    private let pickerHeight: CGFloat = 150
+    private let textFieldHeight: CGFloat = 50
+
     // UI Elements
-    private let amountLabel: UILabel = {
+    private lazy var amountLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("Amount", comment: "Label for amount input")
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = labelFont
         return label
     }()
 
-    private let amountTextField: UITextField = {
+    private lazy var amountTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = NSLocalizedString("Enter Amount", comment: "Placeholder for amount input")
         textField.borderStyle = .roundedRect
@@ -26,46 +35,53 @@ class CurrencyViewController: UIViewController {
         return textField
     }()
     
-    private let fromCurrencyLabel: UILabel = {
+    private lazy var fromCurrencyLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("From Currency", comment: "Label for source currency picker")
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = labelFont
         return label
     }()
 
-    private let sourceCurrencyPicker = UIPickerView()
+    private lazy var sourceCurrencyPicker = UIPickerView()
 
-    private let toCurrencyLabel: UILabel = {
+    private lazy var toCurrencyLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("To Currency", comment: "Label for target currency picker")
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = labelFont
         return label
     }()
 
-    private let targetCurrencyPicker = UIPickerView()
+    private lazy var targetCurrencyPicker = UIPickerView()
     
-    private let resultLabel: UILabel = {
+    private lazy var resultLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("Converted Amount: --", comment: "Label for displaying converted amount")
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.font = resultFont
         label.numberOfLines = 0
         return label
     }()
 
-    private let rateLabel: UILabel = {
+    private lazy var rateLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("Exchange Rate: --", comment: "Label for displaying exchange rate")
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = labelFont
         label.numberOfLines = 0
         return label
     }()
     
-    private let activityIndicator: UIActivityIndicatorView = {
+    private lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
         return indicator
+    }()
+
+    private lazy var swapButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(NSLocalizedString("Swap", comment: "Button title for swapping currencies"), for: .normal)
+        button.addTarget(self, action: #selector(swapCurrencies), for: .touchUpInside)
+        return button
     }()
     
     // ViewModel
@@ -100,54 +116,66 @@ class CurrencyViewController: UIViewController {
         view.addSubview(resultLabel)
         view.addSubview(rateLabel)
         view.addSubview(activityIndicator)
-        
+        view.addSubview(swapButton)
+        view.addSubview(errorLabel) // Add errorLabel to the view
+
         // Layout using SnapKit
         amountLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(padding)
+            make.leading.trailing.equalToSuperview().inset(padding)
         }
 
         amountTextField.snp.makeConstraints { make in
             make.top.equalTo(amountLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(50)
+            make.leading.trailing.equalToSuperview().inset(padding)
+            make.height.equalTo(textFieldHeight)
         }
 
         fromCurrencyLabel.snp.makeConstraints { make in
-            make.top.equalTo(amountTextField.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(amountTextField.snp.bottom).offset(padding)
+            make.leading.trailing.equalToSuperview().inset(padding)
         }
 
         sourceCurrencyPicker.snp.makeConstraints { make in
             make.top.equalTo(fromCurrencyLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(150)
+            make.leading.trailing.equalToSuperview().inset(padding)
+            make.height.equalTo(pickerHeight)
         }
 
         toCurrencyLabel.snp.makeConstraints { make in
-            make.top.equalTo(sourceCurrencyPicker.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(sourceCurrencyPicker.snp.bottom).offset(padding)
+            make.leading.trailing.equalToSuperview().inset(padding)
         }
 
         targetCurrencyPicker.snp.makeConstraints { make in
             make.top.equalTo(toCurrencyLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(150)
+            make.leading.trailing.equalToSuperview().inset(padding)
+            make.height.equalTo(pickerHeight)
         }
 
         resultLabel.snp.makeConstraints { make in
-            make.top.equalTo(targetCurrencyPicker.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(targetCurrencyPicker.snp.bottom).offset(padding)
+            make.leading.trailing.equalToSuperview().inset(padding)
         }
 
         rateLabel.snp.makeConstraints { make in
             make.top.equalTo(resultLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview().inset(padding)
         }
 
         activityIndicator.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(rateLabel.snp.bottom).offset(20)
+            make.top.equalTo(rateLabel.snp.bottom).offset(padding)
+        }
+
+        swapButton.snp.makeConstraints { make in
+            make.top.equalTo(activityIndicator.snp.bottom).offset(padding)
+            make.centerX.equalToSuperview()
+        }
+
+        errorLabel.snp.makeConstraints { make in
+            make.top.equalTo(swapButton.snp.bottom).offset(padding)
+            make.leading.trailing.equalToSuperview().inset(padding)
         }
     }
     
@@ -155,22 +183,49 @@ class CurrencyViewController: UIViewController {
         viewModel.onConversionResult = { [weak self] result, rate in
             Task { @MainActor in
                 self?.activityIndicator.stopAnimating()
-                self?.resultLabel.text = String(format: NSLocalizedString("%.2f %@ is equal to %.2f %@", comment: "Conversion result format"), self?.viewModel.amount ?? 0, self?.viewModel.fromCurrency.code ?? "", result, self?.viewModel.toCurrency.code ?? "")
-                self?.rateLabel.text = String(format: NSLocalizedString("1 %@ = %.2f %@", comment: "Exchange rate format"), self?.viewModel.fromCurrency.code ?? "", rate, self?.viewModel.toCurrency.code ?? "")
+                self?.resultLabel.text = String(format: NSLocalizedString("%.4f %@ is equal to %.4f %@", comment: "Conversion result format"), self?.viewModel.amount ?? 0, self?.viewModel.fromCurrency.code ?? "", result, self?.viewModel.toCurrency.code ?? "")
+                self?.rateLabel.text = String(format: NSLocalizedString("1 %@ = %.4f %@", comment: "Exchange rate format"), self?.viewModel.fromCurrency.code ?? "", rate, self?.viewModel.toCurrency.code ?? "")
+                self?.errorLabel.text = ""
             }
         }
-        
+
         viewModel.onError = { [weak self] error in
             Task { @MainActor in
                 self?.activityIndicator.stopAnimating()
-                self?.resultLabel.text = NSLocalizedString("Conversion failed. Please try again.", comment: "Error message for conversion failure")
-                self?.rateLabel.text = ""
+                self?.errorLabel.text = error
             }
         }
-                
+
         amountTextField.addTarget(self, action: #selector(amountChanged), for: .editingChanged)
     }
     
+    private let errorLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .red
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+
+    @objc private func amountChanged() {
+        guard let text = amountTextField.text else { return }
+        let filteredText = text.filter { "0123456789.".contains($0) }
+        if let amount = Double(filteredText), filteredText.count <= 10 {
+            viewModel.amount = amount
+            amountTextField.text = String(viewModel.amount)
+        } else {
+            amountTextField.text = String(viewModel.amount)
+        }
+    }
+
+    @objc private func swapCurrencies() {
+        let fromCurrency = viewModel.fromCurrency
+        viewModel.setFromCurrency(viewModel.toCurrency)
+        viewModel.setToCurrency(fromCurrency)
+        sourceCurrencyPicker.selectRow(viewModel.getCurrencies().firstIndex(of: viewModel.fromCurrency) ?? 0, inComponent: 0, animated: true)
+        targetCurrencyPicker.selectRow(viewModel.getCurrencies().firstIndex(of: viewModel.toCurrency) ?? 0, inComponent: 0, animated: true)
+    }
+
     private func setupPickers() {
         sourceCurrencyPicker.dataSource = self
         sourceCurrencyPicker.delegate = self
@@ -178,22 +233,11 @@ class CurrencyViewController: UIViewController {
         targetCurrencyPicker.delegate = self
     }
     
-    @objc private func amountChanged() {
-        guard let text = amountTextField.text, let amount = Double(text) else { return }
-        viewModel.amount = amount
-    }
-    
     private func setupDefaultCurrencies() {
         sourceCurrencyPicker.selectRow(0, inComponent: 0, animated: false)
         targetCurrencyPicker.selectRow(1, inComponent: 0, animated: false)
         viewModel.setFromCurrency(viewModel.getCurrencies()[0])
         viewModel.setToCurrency(viewModel.getCurrencies()[1])
-    }
-    
-    private func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Error alert title"), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK button title"), style: .default))
-        present(alert, animated: true)
     }
 }
 
