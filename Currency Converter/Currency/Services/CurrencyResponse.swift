@@ -17,7 +17,7 @@ struct CurrencyResponse: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let amountString = try container.decode(String.self, forKey: .amount)
-        self.amount = Double(amountString) ?? 0.0 // Safely convert to Double
+        self.amount = Double(amountString) ?? 0.0
         self.currency = try container.decode(String.self, forKey: .currency)
     }
 }
