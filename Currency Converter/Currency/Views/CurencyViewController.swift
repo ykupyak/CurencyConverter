@@ -95,6 +95,8 @@ class CurrencyViewController: UIViewController {
         setupBindings()
         setupPickers()
         setupDefaultCurrencies()
+        setupKeyboardDismissRecognizer()
+        setupToolbar()
     }
     
     init(viewModel: CurrencyViewModel) {
@@ -177,6 +179,28 @@ class CurrencyViewController: UIViewController {
             make.top.equalTo(swapButton.snp.bottom).offset(padding)
             make.leading.trailing.equalToSuperview().inset(padding)
         }
+    }
+    
+    private func setupKeyboardDismissRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false // Ensures other touch events (e.g., buttons) are still recognized
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    private func setupToolbar() {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
+        
+        toolbar.setItems([flexSpace, doneButton], animated: false)
+        amountTextField.inputAccessoryView = toolbar
+    }
+
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true) // This will dismiss the keyboard for all text inputs in the view
     }
     
     private func setupBindings() {
